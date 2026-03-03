@@ -1,215 +1,270 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="bn" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>এগ্রো ক্যালকুলেটর</title>
+    <title>এগ্রো ক্যালকুলেটর PRO</title>
     
     <link rel="manifest" href="manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#10b981">
+    <meta name="theme-color" content="#0f172a">
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
+
     <style>
-        body { font-family: 'Hind Siliguri', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { 
+            font-family: 'Hind Siliguri', sans-serif; 
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
         .no-scrollbar::-webkit-scrollbar { display: none; }
+        
         .glass-card { 
-            background: rgba(255, 255, 255, 0.9); 
-            backdrop-filter: blur(10px); 
-            border-radius: 24px; 
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-        .dark .glass-card { 
-            background: rgba(30, 41, 59, 0.8); 
+            background: rgba(30, 41, 59, 0.7); 
+            backdrop-filter: blur(12px); 
+            border-radius: 28px; 
             border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
         }
+
         input { outline: none !important; }
-        .active-crop { transform: scale(1.05); border-width: 3px !important; }
-        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        .animate-ui { animation: slideUp 0.4s ease-out; }
+        
+        .active-crop { 
+            transform: scale(1.05); 
+            border: 2px solid #10b981 !important;
+            background: rgba(16, 185, 129, 0.1) !important;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade { animation: fadeIn 0.4s ease-out forwards; }
     </style>
 </head>
-<body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-screen">
+<body class="bg-slate-950 text-slate-100 min-h-screen pb-32">
 
-    <header class="p-5 flex justify-between items-center sticky top-0 z-50 bg-white/70 dark:bg-slate-950/70 backdrop-blur-xl">
+    <header class="p-6 flex justify-between items-center sticky top-0 z-50 bg-slate-950/80 backdrop-blur-lg border-b border-white/5">
         <div>
-            <h1 class="text-2xl font-black text-emerald-600 dark:text-emerald-400">এগ্রো ক্যালকুলেটর</h1>
-            <p class="text-[10px] font-bold opacity-60 uppercase tracking-widest">Digital Farming Tool</p>
+            <h1 class="text-2xl font-black text-emerald-400 tracking-tight">এগ্রো ক্যালকুলেটর</h1>
+            <div class="flex items-center gap-1">
+                <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
+                <p class="text-[10px] font-bold opacity-60 uppercase tracking-widest">Premium Edition</p>
+            </div>
         </div>
-        <div class="flex gap-3">
-            <button onclick="toggleDarkMode()" class="p-3 rounded-2xl bg-white dark:bg-slate-800 shadow-sm border dark:border-slate-700">
-                <i data-lucide="moon" id="theme-icon" class="w-5 h-5"></i>
-            </button>
-        </div>
+        <button onclick="toggleTheme()" class="p-3 rounded-2xl bg-slate-900 border border-white/10 shadow-lg active:scale-90 transition-all">
+            <i data-lucide="sun" id="theme-icon" class="w-5 h-5 text-yellow-400"></i>
+        </button>
     </header>
 
-    <main class="max-w-md mx-auto p-4 space-y-6 pb-32">
+    <main class="max-w-md mx-auto p-4 space-y-6">
 
         <div class="flex gap-3 overflow-x-auto no-scrollbar py-2">
-            <div onclick="selectCrop('धान', '#10b981', this)" class="crop-btn active-crop flex-shrink-0 w-24 p-4 rounded-3xl glass-card text-center border-2 border-emerald-500">
-                <i data-lucide="wheat" class="mx-auto mb-2 text-emerald-500"></i>
-                <span class="text-sm font-bold">ধান</span>
+            <div onclick="selectCrop('ধান', '#10b981', this)" class="crop-btn active-crop flex-shrink-0 w-24 p-5 rounded-[2rem] glass-card text-center transition-all">
+                <i data-lucide="wheat" class="mx-auto mb-2 text-emerald-400"></i>
+                <span class="text-xs font-bold">ধান</span>
             </div>
-            <div onclick="selectCrop('চাল', '#f59e0b', this)" class="crop-btn flex-shrink-0 w-24 p-4 rounded-3xl glass-card text-center border-2 border-transparent">
+            <div onclick="selectCrop('চাল', '#f59e0b', this)" class="crop-btn flex-shrink-0 w-24 p-5 rounded-[2rem] glass-card text-center transition-all border border-transparent">
                 <i data-lucide="sprout" class="mx-auto mb-2 text-amber-500"></i>
-                <span class="text-sm font-bold">চাল</span>
+                <span class="text-xs font-bold">চাল</span>
             </div>
-            <div onclick="selectCrop('পাট', '#84cc16', this)" class="crop-btn flex-shrink-0 w-24 p-4 rounded-3xl glass-card text-center border-2 border-transparent">
+            <div onclick="selectCrop('পাট', '#84cc16', this)" class="crop-btn flex-shrink-0 w-24 p-5 rounded-[2rem] glass-card text-center transition-all border border-transparent">
                 <i data-lucide="leaf" class="mx-auto mb-2 text-lime-500"></i>
-                <span class="text-sm font-bold">পাট</span>
+                <span class="text-xs font-bold">পাট</span>
             </div>
-            <div onclick="selectCrop('সরিষা', '#eab308', this)" class="crop-btn flex-shrink-0 w-24 p-4 rounded-3xl glass-card text-center border-2 border-transparent">
+            <div onclick="selectCrop('সরিষা', '#eab308', this)" class="crop-btn flex-shrink-0 w-24 p-5 rounded-[2rem] glass-card text-center transition-all border border-transparent">
                 <i data-lucide="layers" class="mx-auto mb-2 text-yellow-500"></i>
-                <span class="text-sm font-bold">সরিষা</span>
+                <span class="text-xs font-bold">সরিষা</span>
             </div>
         </div>
 
-        <div class="glass-card p-6 animate-ui space-y-5">
-            <div class="flex items-center gap-2">
-                <div id="crop-indicator" class="w-2 h-6 bg-emerald-500 rounded-full"></div>
-                <h2 class="font-bold text-lg"><span id="selected-crop-name">ধান</span> হিসাব করুন</h2>
+        <div class="glass-card p-6 animate-fade space-y-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div id="crop-indicator" class="w-1.5 h-6 bg-emerald-500 rounded-full"></div>
+                    <h2 class="font-bold text-lg"><span id="selected-crop-name">ধান</span> এর ওজন</h2>
+                </div>
+                <i data-lucide="calculator" class="w-5 h-5 opacity-30"></i>
             </div>
 
             <div class="grid grid-cols-2 gap-4">
-                <div class="relative">
-                    <label class="text-xs font-bold opacity-50 mb-1 block ml-1">মণ</label>
-                    <input type="number" id="mon-in" oninput="doCalc()" placeholder="০" class="w-full p-4 rounded-2xl bg-slate-100 dark:bg-slate-900/50 text-xl font-bold border-2 border-transparent focus:border-emerald-500 transition-all">
+                <div class="space-y-1.5">
+                    <label class="text-[11px] font-bold opacity-40 ml-1">মণ পরিমাণ</label>
+                    <input type="number" id="mon-in" oninput="runCalc()" placeholder="০" class="w-full p-4 rounded-2xl bg-slate-900/50 text-xl font-bold border border-white/5 focus:border-emerald-500 transition-all text-emerald-400">
                 </div>
-                <div class="relative">
-                    <label class="text-xs font-bold opacity-50 mb-1 block ml-1">কেজি</label>
-                    <input type="number" id="kg-in" oninput="doCalc()" placeholder="০" class="w-full p-4 rounded-2xl bg-slate-100 dark:bg-slate-900/50 text-xl font-bold border-2 border-transparent focus:border-emerald-500 transition-all">
+                <div class="space-y-1.5">
+                    <label class="text-[11px] font-bold opacity-40 ml-1">কেজি পরিমাণ</label>
+                    <input type="number" id="kg-in" oninput="runCalc()" placeholder="০" class="w-full p-4 rounded-2xl bg-slate-900/50 text-xl font-bold border border-white/5 focus:border-emerald-500 transition-all text-emerald-400">
                 </div>
             </div>
 
-            <div class="relative">
-                <label class="text-xs font-bold opacity-50 mb-1 block ml-1">মণ প্রতি দাম (টাকা)</label>
-                <input type="number" id="rate-in" oninput="doCalc()" placeholder="ধরি ১০০০" class="w-full p-4 rounded-2xl bg-slate-100 dark:bg-slate-900/50 text-xl font-bold border-2 border-transparent focus:border-emerald-500 transition-all">
+            <div class="space-y-1.5">
+                <label class="text-[11px] font-bold opacity-40 ml-1">মণ প্রতি বর্তমান বাজার মূল্য (টাকা)</label>
+                <input type="number" id="rate-in" oninput="runCalc()" placeholder="৳ দাম লিখুন" class="w-full p-4 rounded-2xl bg-slate-900/50 text-xl font-bold border border-white/5 focus:border-emerald-500 transition-all text-amber-400">
             </div>
 
-            <div class="bg-emerald-500 text-white p-6 rounded-[2rem] shadow-lg shadow-emerald-500/20 space-y-3">
-                <div class="flex justify-between items-center border-b border-white/20 pb-3">
-                    <span class="text-sm font-medium opacity-90">মোট ওজন</span>
-                    <span id="res-weight" class="text-xl font-bold">০ মণ ০ কেজি</span>
+            <div class="bg-gradient-to-br from-emerald-600 to-teal-700 text-white p-6 rounded-[2.5rem] shadow-xl shadow-emerald-900/20 space-y-4">
+                <div class="flex justify-between items-center border-b border-white/10 pb-3">
+                    <span class="text-xs font-bold opacity-80 uppercase tracking-tighter">মোট হিসাবকৃত ওজন:</span>
+                    <span id="res-weight" class="text-lg font-black">০ মণ ০ কেজি</span>
                 </div>
                 <div class="flex justify-between items-end">
                     <div>
-                        <span class="text-xs opacity-80 block mb-1">মোট দাম</span>
-                        <span id="res-price" class="text-3xl font-black">৳ ০.০০</span>
+                        <span class="text-[10px] opacity-70 block mb-0.5">সর্বমোট মূল্য</span>
+                        <span id="res-price" class="text-3xl font-black tracking-tight">৳ ০.০০</span>
                     </div>
-                    <div class="text-right">
-                        <span class="text-[10px] opacity-80 block uppercase">১ কেজি দাম</span>
-                        <span id="res-unit" class="font-bold">৳ ০.০</span>
+                    <div class="text-right bg-black/20 p-2 px-3 rounded-xl border border-white/10">
+                        <span class="text-[9px] opacity-60 block uppercase leading-none mb-1">১ কেজি দাম</span>
+                        <span id="res-unit" class="font-bold text-sm">৳ ০.০</span>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="glass-card p-6 animate-ui" style="animation-delay: 0.1s;">
-            <div class="flex items-center gap-2 mb-4">
-                <i data-lucide="package" class="w-5 h-5 text-blue-500"></i>
-                <h2 class="font-bold text-lg">বস্তার হিসাব</h2>
+        <div class="glass-card p-6 animate-fade" style="animation-delay: 0.1s;">
+            <div class="flex items-center gap-2 mb-5">
+                <div class="p-2 bg-blue-500/10 rounded-lg">
+                    <i data-lucide="package" class="w-5 h-5 text-blue-400"></i>
+                </div>
+                <h2 class="font-bold text-lg">বস্তা অনুযায়ী হিসাব</h2>
             </div>
 
-            <div class="grid grid-cols-2 gap-4 mb-4">
-                <input type="number" id="bag-count" oninput="calcBags()" placeholder="বস্তার সংখ্যা" class="w-full p-4 rounded-2xl bg-slate-100 dark:bg-slate-900/50 font-bold border-none">
-                <input type="number" id="bag-wt" oninput="calcBags()" placeholder="বস্তার ওজন" class="w-full p-4 rounded-2xl bg-slate-100 dark:bg-slate-900/50 font-bold border-none">
+            <div class="grid grid-cols-2 gap-4 mb-5">
+                <div class="space-y-1.5">
+                    <label class="text-[10px] font-bold opacity-40 ml-1">বস্তার সংখ্যা</label>
+                    <input type="number" id="bag-count" oninput="runBagCalc()" placeholder="যেমন: ১২" class="w-full p-4 rounded-2xl bg-slate-900/50 font-bold border border-white/5 focus:border-blue-500 transition-all">
+                </div>
+                <div class="space-y-1.5">
+                    <label class="text-[10px] font-bold opacity-40 ml-1">প্রতি বস্তার ওজন</label>
+                    <input type="number" id="bag-wt" oninput="runBagCalc()" placeholder="কেজি" class="w-full p-4 rounded-2xl bg-slate-900/50 font-bold border border-white/5 focus:border-blue-500 transition-all">
+                </div>
             </div>
 
-            <div class="flex gap-2 overflow-x-auto no-scrollbar mb-4">
-                <button onclick="setBag(40)" class="px-4 py-2 rounded-xl bg-blue-100 dark:bg-blue-900/30 text-blue-600 text-sm font-bold">৪০ কেজি</button>
-                <button onclick="setBag(50)" class="px-4 py-2 rounded-xl bg-blue-100 dark:bg-blue-900/30 text-blue-600 text-sm font-bold">৫০ কেজি</button>
-                <button onclick="setBag(60)" class="px-4 py-2 rounded-xl bg-blue-100 dark:bg-blue-900/30 text-blue-600 text-sm font-bold">৬০ কেজি</button>
-                <button onclick="setBag(80)" class="px-4 py-2 rounded-xl bg-blue-100 dark:bg-blue-900/30 text-blue-600 text-sm font-bold">৮০ কেজি</button>
+            <div class="flex gap-2 overflow-x-auto no-scrollbar mb-5">
+                <button onclick="quickBag(40)" class="px-5 py-2.5 rounded-xl bg-slate-800 border border-white/5 text-blue-400 text-xs font-bold active:bg-blue-500 active:text-white transition-colors">৪০ কেজি</button>
+                <button onclick="quickBag(50)" class="px-5 py-2.5 rounded-xl bg-slate-800 border border-white/5 text-blue-400 text-xs font-bold active:bg-blue-500 active:text-white transition-colors">৫০ কেজি</button>
+                <button onclick="quickBag(60)" class="px-5 py-2.5 rounded-xl bg-slate-800 border border-white/5 text-blue-400 text-xs font-bold active:bg-blue-500 active:text-white transition-colors">৬০ কেজি</button>
+                <button onclick="quickBag(75)" class="px-5 py-2.5 rounded-xl bg-slate-800 border border-white/5 text-blue-400 text-xs font-bold active:bg-blue-500 active:text-white transition-colors">৭৫ কেজি</button>
             </div>
 
-            <div id="bag-summary" class="p-4 rounded-2xl bg-blue-50 dark:bg-blue-900/10 text-blue-600 dark:text-blue-400 text-center font-bold text-sm">
-                বস্তার তথ্য দিলে এখানে ওজন যোগ হবে
+            <div id="bag-summary" class="p-4 rounded-2xl bg-blue-500/5 border border-blue-500/20 text-blue-400 text-center font-bold text-sm">
+                বস্তার তথ্য ইনপুট দিন...
             </div>
         </div>
 
     </main>
 
-    <nav class="fixed bottom-6 left-4 right-4 h-20 glass-card flex items-center justify-around px-6 z-50 border border-white/50 shadow-2xl">
-        <button class="text-emerald-500 flex flex-col items-center">
-            <i data-lucide="layout-grid"></i>
+    <nav class="fixed bottom-6 left-4 right-4 h-20 glass-card flex items-center justify-around px-6 z-50 border border-white/10 shadow-2xl">
+        <button class="text-emerald-400 flex flex-col items-center">
+            <i data-lucide="layout-grid" class="w-6 h-6"></i>
             <span class="text-[10px] font-bold mt-1">হোম</span>
         </button>
-        <button onclick="window.location.reload()" class="w-14 h-14 bg-emerald-500 rounded-full -mt-12 shadow-xl shadow-emerald-500/40 flex items-center justify-center text-white ring-8 ring-slate-50 dark:ring-slate-950">
-            <i data-lucide="refresh-cw"></i>
+        <button onclick="resetAll()" class="w-14 h-14 bg-emerald-500 rounded-full -mt-14 shadow-xl shadow-emerald-500/40 flex items-center justify-center text-slate-950 ring-[10px] ring-slate-950 active:scale-90 transition-all">
+            <i data-lucide="refresh-cw" class="w-6 h-6"></i>
         </button>
-        <button class="text-slate-400 flex flex-col items-center">
-            <i data-lucide="history"></i>
-            <span class="text-[10px] font-bold mt-1">হিস্ট্রি</span>
+        <button class="text-slate-500 flex flex-col items-center">
+            <i data-lucide="history" class="w-6 h-6"></i>
+            <span class="text-[10px] font-bold mt-1">ইতিহাস</span>
         </button>
     </nav>
 
     <script>
+        // Initialize Icons
         lucide.createIcons();
 
-        function toggleDarkMode() {
-            document.documentElement.classList.toggle('dark');
+        // Theme Management
+        function toggleTheme() {
+            const html = document.documentElement;
             const icon = document.getElementById('theme-icon');
-            const isDark = document.documentElement.classList.contains('dark');
-            icon.setAttribute('data-lucide', isDark ? 'sun' : 'moon');
+            
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                document.body.className = "bg-slate-50 text-slate-900 min-h-screen pb-32";
+                icon.setAttribute('data-lucide', 'moon');
+                icon.className = "w-5 h-5 text-slate-600";
+            } else {
+                html.classList.add('dark');
+                document.body.className = "bg-slate-950 text-slate-100 min-h-screen pb-32";
+                icon.setAttribute('data-lucide', 'sun');
+                icon.className = "w-5 h-5 text-yellow-400";
+            }
             lucide.createIcons();
         }
 
+        // Calculation Logic
         function selectCrop(name, color, el) {
             document.getElementById('selected-crop-name').innerText = name;
             document.getElementById('crop-indicator').style.backgroundColor = color;
-            document.querySelectorAll('.crop-btn').forEach(b => b.classList.remove('active-crop', 'border-emerald-500'));
+            document.querySelectorAll('.crop-btn').forEach(btn => {
+                btn.classList.remove('active-crop');
+                btn.style.borderColor = 'transparent';
+            });
             el.classList.add('active-crop');
             el.style.borderColor = color;
-            doCalc();
+            runCalc();
         }
 
-        function doCalc() {
+        function runCalc() {
             const mon = parseFloat(document.getElementById('mon-in').value) || 0;
             const kg = parseFloat(document.getElementById('kg-in').value) || 0;
             const rate = parseFloat(document.getElementById('rate-in').value) || 0;
 
-            let totalKg = (mon * 40) + kg;
-            let resMon = Math.floor(totalKg / 40);
-            let resKg = (totalKg % 40).toFixed(2);
-            
+            const totalKg = (mon * 40) + kg;
+            const resMon = Math.floor(totalKg / 40);
+            const resKg = (totalKg % 40).toFixed(2);
+
             document.getElementById('res-weight').innerText = `${resMon} মণ ${resKg} কেজি`;
 
-            let pricePerKg = rate / 40;
-            let totalPrice = totalKg * pricePerKg;
+            const priceKg = rate / 40;
+            const totalPrice = totalKg * priceKg;
 
-            document.getElementById('res-unit').innerText = `৳ ${pricePerKg.toFixed(2)}`;
-            document.getElementById('res-price').innerText = `৳ ${totalPrice.toLocaleString('bn-BD', {minimumFractionDigits: 2})}`;
+            document.getElementById('res-unit').innerText = `৳ ${priceKg.toFixed(2)}`;
+            document.getElementById('res-price').innerText = `৳ ${totalPrice.toLocaleString('bn-BD', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
         }
 
-        function setBag(w) {
+        function quickBag(w) {
             document.getElementById('bag-wt').value = w;
-            calcBags();
+            runBagCalc();
         }
 
-        function calcBags() {
+        function runBagCalc() {
             const count = parseFloat(document.getElementById('bag-count').value) || 0;
             const wt = parseFloat(document.getElementById('bag-wt').value) || 0;
-            let total = count * wt;
-            let m = Math.floor(total / 40);
-            let k = total % 40;
+            const total = count * wt;
             
-            document.getElementById('bag-summary').innerText = `মোট: ${total} কেজি (${m} মণ ${k} কেজি)`;
+            const m = Math.floor(total / 40);
+            const k = (total % 40).toFixed(1);
             
-            // Sync with main inputs
+            document.getElementById('bag-summary').innerText = `মোট ওজন: ${total} কেজি (${m} মণ ${k} কেজি)`;
+            
+            // Sync to Main Calc
             document.getElementById('mon-in').value = m;
             document.getElementById('kg-in').value = k;
-            doCalc();
+            runCalc();
         }
 
-        // SW Registration
+        function resetAll() {
+            document.querySelectorAll('input').forEach(i => i.value = '');
+            document.getElementById('res-weight').innerText = '০ মণ ০ কেজি';
+            document.getElementById('res-price').innerText = '৳ ০.০০';
+            document.getElementById('res-unit').innerText = '৳ ০.০';
+            document.getElementById('bag-summary').innerText = 'বস্তার তথ্য ইনপুট দিন...';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Service Worker for PWA
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js');
+                navigator.serviceWorker.register('sw.js').catch(() => {});
             });
         }
     </script>
