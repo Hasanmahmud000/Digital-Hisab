@@ -1,4 +1,4 @@
-const cacheName = 'agro-v1';
+const cacheName = 'agro-v2';
 const assets = ['./', './index.html', './manifest.json'];
 
 self.addEventListener('install', e => {
